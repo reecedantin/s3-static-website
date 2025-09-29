@@ -40,8 +40,5 @@ jobs:
         cd frontend
         npm run build
 
-    - name: Build CDK
-      run: npm run build
-
     - name: Deploy with CDK
       run: npx cdk deploy --require-approval never

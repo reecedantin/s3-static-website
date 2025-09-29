@@ -36,9 +36,6 @@ jobs:
         cd frontend
         npm run build
 
-    - name: Build CDK
-      run: npm run build
-
     - name: Run CDK tests
       run: npm test
 
