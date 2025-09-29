@@ -112,17 +112,7 @@ export class S3StaticStack extends cdk.Stack {
       },
     });
 
-    // Identity Pool
-    const identityPool = new cognito.CfnIdentityPool(this, 'IdentityPool', {
-      identityPoolName: `${id}_identity_pool`,
-      allowUnauthenticatedIdentities: false,
-      cognitoIdentityProviders: [
-        {
-          clientId: userPoolClient.userPoolClientId,
-          providerName: userPool.userPoolProviderName,
-        },
-      ],
-    });
+
 
     // DynamoDB table for todos
     const todosTable = new dynamodb.Table(this, 'TodosTable', {
@@ -157,13 +147,24 @@ export class S3StaticStack extends cdk.Stack {
       restApiName: `${id}-todos-api`,
       description: 'API for managing todos',
       defaultCorsPreflightOptions: {
-        allowOrigins: [`https://${distribution.distributionDomainName}`],
+        allowOrigins: [
+          `https://${distribution.distributionDomainName}`,
+          'http://localhost:5173', // For local development
+          'http://localhost:3000'  // Alternative local dev port
+        ],
         allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-        allowHeaders: ['Content-Type', 'Authorization'],
+        allowHeaders: [
+          'Content-Type',
+          'Authorization',
+          'X-Amz-Date',
+          'X-Api-Key',
+          'X-Amz-Security-Token'
+        ],
+        allowCredentials: true,
       },
     });
 
-    // Cognito authorizer
+    // Cognito authorizer - this is all you need for API Gateway protection
     const authorizer = new apigateway.CognitoUserPoolsAuthorizer(this, 'TodosAuthorizer', {
       cognitoUserPools: [userPool],
     });
@@ -217,10 +218,7 @@ export class S3StaticStack extends cdk.Stack {
       description: 'Cognito User Pool Client ID',
     });
 
-    new cdk.CfnOutput(this, 'IdentityPoolId', {
-      value: identityPool.ref,
-      description: 'Cognito Identity Pool ID',
-    });
+
 
     new cdk.CfnOutput(this, 'HostedUIUrl', {
       value: `https://${userPoolDomain.domainName}.auth.${this.region}.amazoncognito.com`,
@@ -245,7 +243,6 @@ export class S3StaticStack extends cdk.Stack {
           region: this.region,
           userPoolId: userPool.userPoolId,
           userPoolWebClientId: userPoolClient.userPoolClientId,
-          identityPoolId: identityPool.ref,
           hostedUiDomain: userPoolDomain.domainName,
           distributionUrl: `https://${distribution.distributionDomainName}`,
           apiUrl: api.url,

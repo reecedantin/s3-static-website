@@ -1,0 +1,9 @@
+{
+  "region": "us-east-1",
+  "userPoolId": "us-east-1_AVazxw7SW",
+  "userPoolWebClientId": "2np43obi8b40t6n8npv7dttvjn",
+  "identityPoolId": "us-east-1:69783b31-ab5b-41f4-8dae-e3abb06ad5fe",
+  "hostedUiDomain": "s3staticstack-760737694697.auth.us-east-1.amazoncognito.com",
+  "distributionUrl": "https://d21cnebhbil9y1.cloudfront.net",
+  "apiUrl": "https://k7gkykz0x1.execute-api.us-east-1.amazonaws.com/prod"
+}

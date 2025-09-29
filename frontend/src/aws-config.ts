@@ -13,7 +13,6 @@ export const getAwsConfig = async () => {
         region: 'us-east-1',
         userPoolId: 'UPDATE_AFTER_DEPLOY',
         userPoolWebClientId: 'UPDATE_AFTER_DEPLOY',
-        identityPoolId: 'UPDATE_AFTER_DEPLOY',
         hostedUiDomain: 'UPDATE_AFTER_DEPLOY',
         distributionUrl: 'UPDATE_AFTER_DEPLOY',
         apiUrl: 'UPDATE_AFTER_DEPLOY',
@@ -27,7 +26,6 @@ export const getAwsConfig = async () => {
         region: config.region,
         userPoolId: config.userPoolId,
         userPoolClientId: config.userPoolWebClientId,
-        identityPoolId: config.identityPoolId,
         loginWith: {
           oauth: {
             domain: config.hostedUiDomain,
